@@ -1,0 +1,221 @@
+.body-container {
+  background-color: #edede9;
+  margin: auto;
+  height: 100vh;
+}
+
+.title-container {
+  background-color: #415d43;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  border: 8px solid #958888;
+  border-radius: 30px;
+}
+
+#heading {
+  color: white;
+  font-family: "Playwrite AU QLD", cursive, "Times New Roman", Times, serif;
+  font-weight: bold;
+  font-size: 40px;
+  margin: 2px;
+  padding: 2px;
+}
+
+#para {
+  font-size: 20px;
+  font-style: italic;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  margin-top: 2px;
+  color: #f4c56e;
+}
+
+.card-container {
+  border: 5px solid #ffe4c4;
+  border-radius: 20px;
+  background-color: #faeee0;
+  display: flex;
+  flex-direction: column;  
+  align-items: center;
+  width: 1300px;
+  height: 540px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.card-container .btn-container {
+  display: flex;
+  gap: 50px; 
+  justify-content: center;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: #6c1414;
+  font-size: 20px;
+  align-items: center;
+  margin: 10px 0; 
+  font-weight: bold;
+}
+
+.reset-btn{
+  background-color: #cbbfb0;
+  height: 40px;
+  width: 70px;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #6c1414;
+  border-radius: 10px;
+  border: 2px solid #6c1414;
+  cursor:pointer;
+}
+
+.reset-btn:hover{
+  box-shadow: 0 4px 10px rgba(15, 12, 12, 0.4);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 15px;
+  background-color: #97906c50;
+  border: 3px solid #c4b59f;  
+  border-radius: 15px; 
+}
+
+.card {
+  width: 140px;
+  height: 100px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.card-back {
+  background-image: url('assets/background.png');
+}
+
+.card-front {
+  transform: rotateY(180deg);
+}
+
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card:active {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+/* --- RWD --- */
+
+@media (max-width: 1023px) {
+  .body-container {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .title-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px 5px;
+    margin: 0 auto;
+    border-width: 5px;
+    box-sizing: border-box;
+  }
+
+  #heading {
+    font-size: 22px;
+    text-align: center;
+    margin: 5px 0;
+  }
+
+  #para {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+  }
+
+  .card-container {
+    width: 100%;
+    padding: 10px 0;
+    margin: 0;
+    border-width: 3px;
+    background-color: #faeee0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .card-container .btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    justify-content: center;
+    gap: 5px;
+    margin: 10px 0;
+    font-size: 15px;
+  }
+
+  .card-container .btn-container span {
+    text-align: center;
+    width: 100%;
+  }
+
+  .reset-btn {
+    width: 60px;
+    height: 30px;
+    font-size: 13px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    max-width: 360px;            
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    justify-items: center;
+    box-sizing: border-box;
+  }
+
+  .card {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+  }
+
+  .card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
