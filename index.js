@@ -3,101 +3,132 @@ const images = [
   "parrot.png", "rabbit.png", "sparrow.png", "tiger.png"
 ];
 
-let cards = images.concat(images); 
-let moves = 0;
-let firstCard = null;
-let secondCard = null;
-let lockBoard = false;
+let cardsList = images.concat(images);
+let firstFlipped = null;
+let secondFlipped = null;
+let isBoardLocked = false;
+let totalMoves = 0;
 
-const cardsContainer = document.getElementById("cards");
-const movesDisplay = document.getElementById("moves");
-movesDisplay.textContent = moves;
-const resetButton = document.getElementById("reset-btn");
+const board = document.getElementById("cards");
+const movesText = document.getElementById("moves");
+const resetGameBtn = document.getElementById("reset-btn");
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    let temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+// Create notification
+const popup = document.createElement("div");
+popup.id = "notification";
+popup.style.display = "none";
+
+const message = document.createElement("p");
+message.style.marginBottom = "10px";
+
+const playAgain = document.createElement("button");
+playAgain.textContent = "Play Again";
+playAgain.className = "reset-btn";
+playAgain.addEventListener("click", startGame);
+
+popup.appendChild(message);
+popup.appendChild(playAgain);
+document.querySelector(".card-container").appendChild(popup);
+
+function shuffleCards(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let randIndex = Math.floor(Math.random() * (i + 1));
+    let temp = arr[i];
+    arr[i] = arr[randIndex];
+    arr[randIndex] = temp;
   }
 }
 
-function createCard(imageName) {
-  const card = document.createElement("div");
+function createCardElement(imgName) {
+  let card = document.createElement("div");
   card.classList.add("card");
 
-  const inner = document.createElement("div");
+  let inner = document.createElement("div");
   inner.classList.add("card-inner");
 
-  const front = document.createElement("div");
-  front.classList.add("card-front");
+  let frontSide = document.createElement("div");
+  frontSide.classList.add("card-front");
 
-  const img = document.createElement("img");
-  img.src = `assets/${imageName}`;
-  img.style.width = "100%";
-  img.style.height = "100%";
-  img.style.borderRadius = "10px";
-  front.appendChild(img);
+  let image = document.createElement("img");
+  image.src = "assets/" + imgName;
+  image.alt = imgName;
+  image.style.width = "100%";
+  image.style.height = "100%";
+  image.style.borderRadius = "10px";
+  frontSide.appendChild(image);
 
-  const back = document.createElement("div");
-  back.classList.add("card-back"); 
+  let backSide = document.createElement("div");
+  backSide.classList.add("card-back");
 
-  inner.appendChild(front);
-  inner.appendChild(back);
+  inner.appendChild(frontSide);
+  inner.appendChild(backSide);
   card.appendChild(inner);
 
   card.addEventListener("click", function () {
-    if (lockBoard || card.classList.contains("flipped")) return;
-
-    card.classList.add("flipped");
-
-    if (!firstCard) {
-      firstCard = card;
-    } else {
-      secondCard = card;
-      lockBoard = true;
-      moves++;
-      movesDisplay.textContent = moves;
-
-      const firstImg = firstCard.querySelector("img").src;
-      const secondImg = secondCard.querySelector("img").src;
-
-      if (firstImg === secondImg) {
-        // Matched
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-      } else {
-        // Not matched
-        setTimeout(() => {
-          firstCard.classList.remove("flipped");
-          secondCard.classList.remove("flipped");
-          firstCard = null;
-          secondCard = null;
-          lockBoard = false;
-        }, 800);
-      }
-    }
+    cardClicked(card);
   });
 
   return card;
 }
 
-function setupBoard() {
-  cardsContainer.innerHTML = "";
-  shuffle(cards);
-  moves = 0;
-  movesDisplay.textContent = moves;
-  firstCard = null;
-  secondCard = null;
-  lockBoard = false;
+function cardClicked(card) {
+  if (isBoardLocked || card.classList.contains("flipped")) {
+    return;
+  }
 
-  for (let i = 0; i < cards.length; i++) {
-    const cardElement = createCard(cards[i]);
-    cardsContainer.appendChild(cardElement);
+  card.classList.add("flipped");
+
+  if (firstFlipped === null) {
+    firstFlipped = card;
+  } else {
+    secondFlipped = card;
+    isBoardLocked = true;
+    totalMoves++;
+    movesText.textContent = totalMoves;
+
+    let img1 = firstFlipped.querySelector("img").src;
+    let img2 = secondFlipped.querySelector("img").src;
+
+    if (img1 === img2) {
+      firstFlipped = null;
+      secondFlipped = null;
+      isBoardLocked = false;
+      checkIfGameWon();
+    } else {
+      setTimeout(function () {
+        firstFlipped.classList.remove("flipped");
+        secondFlipped.classList.remove("flipped");
+        firstFlipped = null;
+        secondFlipped = null;
+        isBoardLocked = false;
+      }, 800);
+    }
   }
 }
 
-resetButton.addEventListener("click", setupBoard);
-window.addEventListener("DOMContentLoaded", setupBoard);
+function checkIfGameWon() {
+  let allFlipped = document.querySelectorAll(".card.flipped").length;
+  if (allFlipped === cardsList.length) {
+    message.textContent = "You found all the matches in " + totalMoves + " moves!!!";
+    popup.style.display = "block";
+  }
+}
+
+function startGame() {
+  board.innerHTML = "";
+  shuffleCards(cardsList);
+  totalMoves = 0;
+  movesText.textContent = totalMoves;
+  firstFlipped = null;
+  secondFlipped = null;
+  isBoardLocked = false;
+  popup.style.display = "none";
+
+  for (let i = 0; i < cardsList.length; i++) {
+    let cardElement = createCardElement(cardsList[i]);
+    board.appendChild(cardElement);
+  }
+}
+
+resetGameBtn.addEventListener("click", startGame);
+window.addEventListener("DOMContentLoaded", startGame);
