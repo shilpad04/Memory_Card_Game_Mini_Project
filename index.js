@@ -3,7 +3,7 @@ const images = [
   "parrot.png", "rabbit.png", "sparrow.png", "tiger.png"
 ];
 
-let cards = images.concat(images); // total 16 cards (each image twice)
+let cards = images.concat(images); 
 let moves = 0;
 let firstCard = null;
 let secondCard = null;
@@ -33,7 +33,6 @@ function createCard(imageName) {
   const front = document.createElement("div");
   front.classList.add("card-front");
 
-  // Set image using <img> for better beginner experience
   const img = document.createElement("img");
   img.src = `assets/${imageName}`;
   img.style.width = "100%";
@@ -42,13 +41,12 @@ function createCard(imageName) {
   front.appendChild(img);
 
   const back = document.createElement("div");
-  back.classList.add("card-back"); // uses background.png from your CSS
+  back.classList.add("card-back"); 
 
   inner.appendChild(front);
   inner.appendChild(back);
   card.appendChild(inner);
 
-  // Click logic
   card.addEventListener("click", function () {
     if (lockBoard || card.classList.contains("flipped")) return;
 
